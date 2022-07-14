@@ -1,52 +1,38 @@
 const express = require('express')
+const cors = require('cors')
+const app = express()
+
+const port = process.env.PORT || 4000
 const { graphqlHTTP } = require('express-graphql')
-const client = require('./dbconfig/index')
-const {
-  GraphQLID,
-  GraphQLString,
-  GraphQLList,
-  GraphQLInt,
-  GraphQLObjectType,
-  GraphQLSchema,
-  GraphQLNonNull,
-} = require('graphql')
 
-var app = express()
+const schema = require('./schema/schema')
+app.use(cors())
 
-const PersonType = new GraphQLObjectType({
-  name: 'Person',
-  fields: {
-    id: { type: GraphQLID },
-    name: { type: GraphQLString },
-    author: { type: GraphQLString },
-    price: { type: GraphQLInt },
-  },
-})
-
-const schema = new GraphQLSchema({
-  query: new GraphQLObjectType({
-    name: 'query',
-    fields: {
-      people: {
-        type: GraphQLList(PersonType),
-        resolve: (root, args, context, info) => {
-          const db = client.db('graphql')
-          const data = db.collection('documents').find().toArray()
-          return data
-        },
-      },
-      person: {},
-    },
-  }),
-})
+app.use(express.json())
 
 app.use(
   '/graphql',
   graphqlHTTP({
-    schema: schema,
+    schema,
     graphiql: true,
   }),
 )
-app.listen(4000, () => {
-  console.log('Listening at http://localhost:4000')
+
+// app.get('/', (req, res) => {
+//   let query = `{codeImprove {id,name,email,phone},userLocation{name,city,country}}`
+//   graphql(schema, query).then((result) => {
+//     res.json(result)
+//   })
+// })
+
+app.listen(port, () => {
+  console.log(`App running on http://localhost:${port}`)
 })
+
+// const GraphQLSchema = require('graphql').GraphQLSchema
+// const schema = require('./schema/schema')
+// graphqlHTTP({
+//   schema: new GraphQLSchema({}),
+//   schema: schema,
+//   graphiql: true,
+// })
