@@ -17,6 +17,9 @@ app.use(
     graphiql: true,
   }),
 )
+app.get('/test', (req, res) => {
+  console.log('connection tested for graphql')
+})
 
 // app.get('/', (req, res) => {
 //   let query = `{codeImprove {id,name,email,phone},userLocation{name,city,country}}`
