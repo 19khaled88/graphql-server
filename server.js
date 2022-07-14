@@ -2,7 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 
-const PORT = 4000
+const port = process.env.PORT || 4000
 const { graphqlHTTP } = require('express-graphql')
 
 const schema = require('./schema/schema')
@@ -25,8 +25,8 @@ app.use(
 //   })
 // })
 
-app.listen(PORT, () => {
-  console.log(`App running on http://localhost:${PORT}`)
+app.listen(port, () => {
+  console.log(`App running on http://localhost:${port}`)
 })
 
 // const GraphQLSchema = require('graphql').GraphQLSchema
