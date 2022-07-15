@@ -5,7 +5,13 @@ const name = process.env.APP_USER_NAME
 const pass = process.env.APP_USER_PASS
 const url = `mongodb+srv://${name}:${pass}@cluster0.ka5da.mongodb.net/graphql?retryWrites=true&w=majority`
 // const url = 'mongodb://localhost:27017/'
-const client = new MongoClient(url, { useUnifiedTopology: true })
+const client = new MongoClient(
+  url,
+  { useUnifiedTopology: true },
+  { useNewUrlParser: true },
+  { connectTimeoutMS: 30000 },
+  { keepAlive: 1 },
+)
 client.connect(function (err) {
   console.log('Connection successful to server')
 })
